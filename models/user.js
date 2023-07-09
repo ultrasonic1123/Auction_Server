@@ -19,6 +19,9 @@ const UserSchema = new Schema({
     type: String,
     required: [true, "password is required"],
   },
+  dateOfBirth: {
+    type: Date,
+  },
 });
 
 module.exports = mongoose.model("user", UserSchema);

@@ -15,8 +15,7 @@ const userSignUp = async (req, res) => {
 
 const userLogin = async (req, res) => {
   const { userInfo } = req.body;
-  const err = "LOG IN FAILED";
-  console.log({ userInfo });
+  console.log({ userInfo }, "req", req.body);
   try {
     let checkUser = await User_Model.findOne({
       phoneNumber: userInfo.phoneNumber,
@@ -32,9 +31,9 @@ const userLogin = async (req, res) => {
         expiresIn: "1h",
       });
       res.status(200).json({ token });
-    } else res.status(403).json(err);
+    }
   } catch (err) {
-    res.status(500).json(err);
+    res.status(403).json({ err: "wrong pass or username" });
   }
 };
 

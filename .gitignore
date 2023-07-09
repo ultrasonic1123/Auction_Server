@@ -1,3 +1,13 @@
 node_modules
 package-lock.json
 test-api.http
+.gitignore
+
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
