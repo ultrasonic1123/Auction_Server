@@ -22,15 +22,19 @@ const userLogin = async (req, res) => {
       password: userInfo.password,
     });
     const userDataToken = {
-      first: checkUser.firstName,
+      firstName: checkUser.firstName,
       lastName: checkUser.lastName,
-      userName: checkUser.userName,
     };
     if (checkUser) {
       let token = jwt.sign(userDataToken, process.env.SECRETE_KEY, {
         expiresIn: "1h",
       });
-      res.status(200).json({ token });
+      res.status(200).json({
+        token,
+        firstName: checkUser.firstName,
+        lastName: checkUser.lastName,
+        phoneNumber: checkUser.phoneNumber,
+      });
     }
   } catch (err) {
     res.status(403).json({ err: "wrong pass or username" });
