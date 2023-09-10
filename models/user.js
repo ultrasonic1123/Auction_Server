@@ -22,6 +22,15 @@ const UserSchema = new Schema({
   dateOfBirth: {
     type: Date,
   },
+  products: {
+    type: [mongoose.Types.ObjectId],
+  },
+  rooms: {
+    type: [mongoose.Types.ObjectId],
+  },
+  victoryRooms: {
+    type: [mongoose.Types.ObjectId],
+  },
 });
 
 module.exports = mongoose.model("user", UserSchema);
