@@ -48,19 +48,40 @@ const getHomePage = async (req, res) => {
 };
 
 const createRoom = async (req, res) => {
-  console.log("check", req.body.room, req.file);
+  console.log("check", req.file);
   const room = JSON.parse(req.body.room);
   const image = {
     data: fs.readFileSync(__dirname + "/../uploads/" + req.file.filename),
     imageType: req.file.mimetype,
   };
   room.image = image;
-  console.log("room", room);
+  console.log("room", room, room.bannedUsers);
+  if (room.bannedUsers) {
+    room.bannedUsers = room.bannedUsers.split(",");
+  }
   try {
     const newRoom = await Room.create(room);
     res.status(200).json(newRoom);
   } catch (e) {
     console.log("Create new auction fail", e);
+  }
+};
+
+const modifyRoom = async (req, res) => {
+  console.log("check", req.body, req.file);
+  const room = JSON.parse(req.body.room);
+  if (req.file) {
+    const image = {
+      data: fs.readFileSync(__dirname + "/../uploads/" + req.file.filename),
+      imageType: req.file.mimetype,
+    };
+    room.image = image;
+  }
+  try {
+    const updatedRoom = await Room.findOneAndUpdate({ _id: room._id }, room);
+    res.status(200).json(updatedRoom);
+  } catch (e) {
+    console.log("Update auction room fail", e);
   }
 };
 
@@ -75,6 +96,7 @@ const getRooms = (req, res) => {
 
 const getRoomsByCategory = async (req, res) => {
   const query = req.query;
+  console.log("query", query);
   let data = await Room.find(query);
   res.status(200).json(data);
 };
@@ -106,6 +128,60 @@ const updateOwnRoom = async (req, res) => {
   }
 };
 
+const getUserInformationByPhone = async (req, res) => {
+  console.log(req.query.phoneNumber);
+  const phoneNumber = `+${req.query.phoneNumber.trim()}`;
+  console.log({ phoneNumber });
+  try {
+    let user = await User.findOne({ phoneNumber });
+    res.status(200).json(user);
+  } catch (e) {
+    console.log(e, "Get user failed");
+  }
+};
+
+const getOwnRooms = async (req, res) => {
+  console.log(req.body);
+  let ids = req.body.ids;
+  console.log({ ids });
+  try {
+    let rooms = await Room.find({
+      _id: {
+        $in: ids,
+      },
+    });
+    res.status(200).json(rooms);
+  } catch (e) {
+    console.log("Get own rooms failed", e);
+  }
+};
+
+const updateStartAt = async (req, res) => {
+  try {
+    let result = await Room.findOneAndUpdate(
+      { _id: req.body._id },
+      { startAt: req.body.startAt }
+    );
+    res.status(200).json(result);
+  } catch (e) {
+    console.log("Update start at failed", e);
+    res.status(500);
+  }
+};
+
+const updateRoomStatus = async (req, res) => {
+  try {
+    let updatedRoom = await Room.findOneAndUpdate(
+      { _id: req.body.id },
+      { status: req.body.status }
+    );
+    res.status(200).json(updatedRoom);
+  } catch (e) {
+    console.log("Update room status failed", e);
+    res.status(500).json(e);
+  }
+};
+
 module.exports = {
   userSignUp,
   userLogin,
@@ -114,4 +190,9 @@ module.exports = {
   getRooms,
   getRoomsByCategory,
   updateOwnRoom,
+  getUserInformationByPhone,
+  getOwnRooms,
+  modifyRoom,
+  updateStartAt,
+  updateRoomStatus,
 };

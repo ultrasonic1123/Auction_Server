@@ -53,10 +53,28 @@ const RoomSchema = new Schema({
     type: String,
     require: true,
   },
-  bannedUser: {
-    type: [mongoose.Types.ObjectId],
+  bannedUsers: {
+    type: [String],
   },
   status: {
+    type: String,
+  },
+  history: {
+    type: [
+      {
+        user: {
+          type: String,
+        },
+        price: {
+          type: Number,
+        },
+      },
+    ],
+  },
+  startAt: {
+    type: Number,
+  },
+  victoryPhoneNumber: {
     type: String,
   },
 });

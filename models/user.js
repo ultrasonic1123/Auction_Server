@@ -31,6 +31,10 @@ const UserSchema = new Schema({
   victoryRooms: {
     type: [mongoose.Types.ObjectId],
   },
+  address: {
+    type: String,
+    require: true,
+  },
 });
 
 module.exports = mongoose.model("user", UserSchema);
