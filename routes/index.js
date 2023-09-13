@@ -11,6 +11,8 @@ const {
   modifyRoom,
   updateStartAt,
   updateRoomStatus,
+  updateRoomHistory,
+  updateVictoryRooms,
 } = require("../controllers/userControllers");
 const { verifyToken } = require("../middlewares/authorizationMiddleware");
 const router = require("express").Router();
@@ -36,4 +38,6 @@ router.post("/get-own-rooms", getOwnRooms);
 router.post("/update-room", upload.single("image"), modifyRoom);
 router.post("/update-start-at", updateStartAt);
 router.post("/update-room-status", updateRoomStatus);
+router.post("/update-room-history", updateRoomHistory);
+router.post("/update-victory-rooms", updateVictoryRooms);
 module.exports = router;

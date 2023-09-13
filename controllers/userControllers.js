@@ -128,6 +128,25 @@ const updateOwnRoom = async (req, res) => {
   }
 };
 
+const updateVictoryRooms = async (req, res) => {
+  const phoneNumber = req.body.phoneNumber;
+  const roomId = req.body.room;
+  try {
+    let updatedUser = await User.findOneAndUpdate(
+      { phoneNumber },
+      { $push: { victoryRooms: roomId } },
+      {
+        returnOriginal: false,
+      }
+    );
+    res.status(201).json(updatedUser);
+  } catch (e) {
+    console.log(e);
+    result.message = "err when update user";
+    res.status(500).json(e);
+  }
+};
+
 const getUserInformationByPhone = async (req, res) => {
   console.log(req.query.phoneNumber);
   const phoneNumber = `+${req.query.phoneNumber.trim()}`;
@@ -182,6 +201,20 @@ const updateRoomStatus = async (req, res) => {
   }
 };
 
+const updateRoomHistory = async (req, res) => {
+  console.log("check", req.body.id, req.body.history);
+  try {
+    let updatedRoom = await Room.findOneAndUpdate(
+      { _id: req.body.id },
+      { $set: { history: req.body.history } }
+    );
+    res.status(200).json(updatedRoom);
+  } catch (e) {
+    console.log("Update room status failed", e);
+    res.status(500).json(e);
+  }
+};
+
 module.exports = {
   userSignUp,
   userLogin,
@@ -195,4 +228,6 @@ module.exports = {
   modifyRoom,
   updateStartAt,
   updateRoomStatus,
+  updateRoomHistory,
+  updateVictoryRooms,
 };

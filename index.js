@@ -33,9 +33,13 @@ mongoose
   })
   .catch((err) => console.log(err));
 let rooms = {};
+let chatMessages = [];
 io.on("connection", (socket) => {
   socket.on("join", () => {});
   socket.on("bid", (data) => {
-    rooms = handleOnBid(socket, rooms, data);
+    rooms = handleOnBid(socket, rooms, data, io);
+  });
+  socket.on("chat message", (data) => {
+    chatMessages.push(data);
   });
 });

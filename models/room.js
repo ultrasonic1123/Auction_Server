@@ -68,6 +68,9 @@ const RoomSchema = new Schema({
         price: {
           type: Number,
         },
+        phoneNumber: {
+          type: String,
+        },
       },
     ],
   },
