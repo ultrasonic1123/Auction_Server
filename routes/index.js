@@ -26,7 +26,7 @@ const storage = multer.diskStorage({
     cb(null, Date.now() + "--" + file.originalname);
   },
 });
-const upload = multer({ storage });
+const upload = multer({ storage, limits: { fieldSize: 10 * 1024 * 1024 } });
 router.post("/register", userSignUp);
 router.post("/login", userLogin);
 router.get("/home-page", verifyToken, getHomePage);
