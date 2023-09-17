@@ -54,7 +54,7 @@ const RoomSchema = new Schema({
     require: true,
   },
   bannedUsers: {
-    type: [String],
+    type: String,
   },
   status: {
     type: String,

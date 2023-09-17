@@ -74,6 +74,7 @@ const modifyRoom = async (req, res) => {
   if (room.status === "active") {
     room.startAt = Date.now();
   }
+  console.log("room", room);
   if (req.file) {
     const image = {
       data: fs.readFileSync(__dirname + "/../uploads/" + req.file.filename),
@@ -100,7 +101,6 @@ const getRooms = (req, res) => {
 
 const getRoomsByCategory = async (req, res) => {
   const query = req.query;
-  console.log("query", query);
   let data = await Room.find(query);
   res.status(200).json(data);
 };
@@ -152,9 +152,7 @@ const updateVictoryRooms = async (req, res) => {
 };
 
 const getUserInformationByPhone = async (req, res) => {
-  console.log(req.query.phoneNumber);
   const phoneNumber = `+${req.query.phoneNumber.trim()}`;
-  console.log({ phoneNumber });
   try {
     let user = await User.findOne({ phoneNumber });
     res.status(200).json(user);
@@ -164,9 +162,7 @@ const getUserInformationByPhone = async (req, res) => {
 };
 
 const getOwnRooms = async (req, res) => {
-  console.log(req.body);
   let ids = req.body.ids;
-  console.log({ ids });
   try {
     let rooms = await Room.find({
       _id: {
@@ -200,7 +196,6 @@ const updateRoomStatus = async (req, res) => {
       { _id: req.body.id },
       { status: req.body.status, startAt }
     );
-    console.log("update", req.body.status);
     res.status(200).json(updatedRoom);
   } catch (e) {
     console.log("Update room status failed", e);
@@ -209,7 +204,6 @@ const updateRoomStatus = async (req, res) => {
 };
 
 const updateRoomHistory = async (req, res) => {
-  console.log("check", req.body.id, req.body.history);
   try {
     let updatedRoom = await Room.findOneAndUpdate(
       { _id: req.body.id },
@@ -224,7 +218,6 @@ const updateRoomHistory = async (req, res) => {
 
 const searchRooms = async (req, res) => {
   let query = req.query;
-  console.log("search", query);
   try {
     let searchResult = await Room.find({
       roomName: { $regex: `${query.roomName}`, $options: "i" },
