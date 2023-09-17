@@ -33,13 +33,21 @@ mongoose
   })
   .catch((err) => console.log(err));
 let rooms = {};
-let chatMessages = [];
+let chatMessages = [
+  { message: "Welcome to Dken Auction!", user: { name: "System" } },
+  { message: "Ready for staring your own auction", user: { name: "System" } },
+  { message: "Or join interesting aution", user: { name: "System" } },
+];
 io.on("connection", (socket) => {
   socket.on("join", () => {});
   socket.on("bid", (data) => {
     rooms = handleOnBid(socket, rooms, data, io);
   });
+  socket.on("main page", () => {
+    io.emit("chat message", chatMessages);
+  });
   socket.on("chat message", (data) => {
     chatMessages.push(data);
+    io.emit("chat message", chatMessages);
   });
 });

@@ -70,6 +70,10 @@ const createRoom = async (req, res) => {
 const modifyRoom = async (req, res) => {
   console.log("check", req.body, req.file);
   const room = JSON.parse(req.body.room);
+  console.log("Checker", room.status);
+  if (room.status === "active") {
+    room.startAt = Date.now();
+  }
   if (req.file) {
     const image = {
       data: fs.readFileSync(__dirname + "/../uploads/" + req.file.filename),
@@ -190,10 +194,13 @@ const updateStartAt = async (req, res) => {
 
 const updateRoomStatus = async (req, res) => {
   try {
+    let startAt = null;
+    if (req.body.status === "active") startAt = Date.now();
     let updatedRoom = await Room.findOneAndUpdate(
       { _id: req.body.id },
-      { status: req.body.status }
+      { status: req.body.status, startAt }
     );
+    console.log("update", req.body.status);
     res.status(200).json(updatedRoom);
   } catch (e) {
     console.log("Update room status failed", e);
@@ -215,6 +222,20 @@ const updateRoomHistory = async (req, res) => {
   }
 };
 
+const searchRooms = async (req, res) => {
+  let query = req.query;
+  console.log("search", query);
+  try {
+    let searchResult = await Room.find({
+      roomName: { $regex: `${query.roomName}`, $options: "i" },
+    });
+    res.status(200).json(searchResult);
+  } catch (e) {
+    console.log("Search room status failed", e);
+    res.status(500).json(e);
+  }
+};
+
 module.exports = {
   userSignUp,
   userLogin,
@@ -230,4 +251,5 @@ module.exports = {
   updateRoomStatus,
   updateRoomHistory,
   updateVictoryRooms,
+  searchRooms,
 };

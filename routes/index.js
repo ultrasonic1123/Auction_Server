@@ -13,6 +13,7 @@ const {
   updateRoomStatus,
   updateRoomHistory,
   updateVictoryRooms,
+  searchRooms,
 } = require("../controllers/userControllers");
 const { verifyToken } = require("../middlewares/authorizationMiddleware");
 const router = require("express").Router();
@@ -40,4 +41,5 @@ router.post("/update-start-at", updateStartAt);
 router.post("/update-room-status", updateRoomStatus);
 router.post("/update-room-history", updateRoomHistory);
 router.post("/update-victory-rooms", updateVictoryRooms);
+router.get("/search-rooms", searchRooms);
 module.exports = router;
